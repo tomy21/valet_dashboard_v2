@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN mkdir .next
 RUN npm install --force
 # RUN npm ci --only=production
-RUN npm run build
+RUN /bin/sh -c npm run build
 
 COPY . .
 
