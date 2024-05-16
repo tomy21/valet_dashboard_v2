@@ -44,6 +44,7 @@ const FormLogin = () => {
           JSON.stringify(dataLogin),
           key
         ).toString();
+        console.log(encrypData);
 
         await axios.post(
           "http://147.139.135.195:8090/api/login",
