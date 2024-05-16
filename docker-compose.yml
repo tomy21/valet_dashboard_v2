@@ -1,13 +1,24 @@
-version: '3.8'
+version: '3'
 
 services:
-  dashboard:
-    image: docker.io/library/dashboard_valet_v2
+  app:
+    container_name: 'server_transaksi'
+    build: 
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - PORT=4000
     ports:
-      - "7099:3000"
+      - "7001:4000"
+    # command: npm install cookie-parser && npm start
     networks:
-      - my-bridge-network
+      - apps_network
+  
+volumes:
+  node_modules:
 
 networks:
-  my-bridge-network:
+  backend_network:
     driver: bridge
