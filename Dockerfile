@@ -3,8 +3,7 @@ FROM node:18-alpine
 WORKDIR /app
 
 COPY package*.json ./
-
-
+RUN mkdir .next
 RUN npm install --force
 # RUN npm ci --only=production
 RUN npm run build
