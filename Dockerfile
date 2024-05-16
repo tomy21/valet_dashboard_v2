@@ -6,11 +6,11 @@ COPY package*.json ./
 
 
 RUN npm install --force
-RUN npm ci --only=production
+# RUN npm ci --only=production
 RUN npm run build
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["npm","run"]
+CMD ["npm","run", "start"]
