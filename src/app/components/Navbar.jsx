@@ -37,7 +37,7 @@ export default function Navbar({ username, email }) {
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      await axios.get("http://localhost:3008/api/logout");
+      await axios.get("http://147.139.135.195:8090/api/logout");
       router.push("/");
     } catch (error) {
       console.log(error);

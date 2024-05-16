@@ -51,21 +51,20 @@ export default function Dashboard() {
   const router = useRouter();
 
   const dateTime = DateTime.fromJSDate(startDate, { zone: "Asia/Jakarta" });
-  const Navbar = () => {
-    useEffect(() => {
-      // Menghapus atribut `bis_skin_checked` dari semua elemen
-      document.querySelectorAll("[bis_skin_checked]").forEach((el) => {
-        el.removeAttribute("bis_skin_checked");
-      });
-    }, []);
-  };
+
+  useEffect(() => {
+    // Menghapus atribut `bis_skin_checked` dari semua elemen
+    document.querySelectorAll("[bis_skin_checked]").forEach((el) => {
+      el.removeAttribute("bis_skin_checked");
+    });
+  }, []);
   const formattedDate = dateTime.toFormat("yyyy-MM-dd");
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const tokenResponse = await axios.get(
-          "http://localhost:3008/api/token",
+          "http://147.139.135.195:8090/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
@@ -77,7 +76,7 @@ export default function Dashboard() {
 
         // Fetch dashboard data using the new token
         const response = await axios.get(
-          `http://localhost:3008/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
+          `http://147.139.135.195:8090/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
           {
             headers: {
               Authorization: `Bearer ${newToken}`,
@@ -126,7 +125,7 @@ export default function Dashboard() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          "http://localhost:3008/api/getAllLocation"
+          "http://147.139.135.195:8090/api/getAllLocation"
         );
         setLocation(locationResponse.data);
       } catch (error) {

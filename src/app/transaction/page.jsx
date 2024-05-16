@@ -13,20 +13,18 @@ export default function Transaction() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const Navbar = () => {
-    useEffect(() => {
-      // Menghapus atribut `bis_skin_checked` dari semua elemen
-      document.querySelectorAll("[bis_skin_checked]").forEach((el) => {
-        el.removeAttribute("bis_skin_checked");
-      });
-    }, []);
-  };
+  useEffect(() => {
+    // Menghapus atribut `bis_skin_checked` dari semua elemen
+    document.querySelectorAll("[bis_skin_checked]").forEach((el) => {
+      el.removeAttribute("bis_skin_checked");
+    });
+  }, []);
 
   useEffect(() => {
     const getToken = async () => {
       try {
         const tokenResponse = await axios.get(
-          "http://localhost:3008/api/token",
+          "http://147.139.135.195:8090/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
