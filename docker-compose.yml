@@ -11,14 +11,14 @@ services:
     environment:
       - PORT=4000
     ports:
-      - "7001:4000"
+      - "9101:4000"
     command: npm run dev
     networks:
-      - backend_network
+      - app_network
   
 volumes:
   node_modules:
 
 networks:
-  backend_network:
+  app_network:
     driver: bridge
