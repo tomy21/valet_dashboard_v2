@@ -2,8 +2,7 @@ version: '3'
 
 services:
   app:
-    image: valet_dashboard_v2
-    container_name: 'server_transaksi'
+    container_name: 'dashboard_v2_valet'
     build: 
       dockerfile: ./Dockerfile
     volumes:
@@ -15,7 +14,7 @@ services:
       - "7001:4000"
     command: npm run dev
     networks:
-      - apps_network
+      - backend_network
   
 volumes:
   node_modules:
