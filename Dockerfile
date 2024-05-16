@@ -4,13 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 # RUN mkdir .next
-RUN npm install --force
+RUN npm install
 # RUN npm ci --only=production
 
 COPY . .
 
-RUN npm run build
+# RUN npm run build
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["npm","run", "dev"]
