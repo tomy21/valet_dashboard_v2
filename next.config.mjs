@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // images: {
-  //   domains: ["localhost"],
-  // },
+  images: {
+    domains: ["147.139.135.195"],
+  },
   output: "standalone",
   async rewrites() {
     return [
