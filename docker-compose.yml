@@ -11,7 +11,7 @@ services:
     environment:
       - PORT=4000
     ports:
-      - "7001:4000"
+      - "8091:4000"
     command: npm run dev
     networks:
       - app_network
