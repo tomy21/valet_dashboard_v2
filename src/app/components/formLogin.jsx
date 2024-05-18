@@ -46,7 +46,7 @@ const FormLogin = () => {
         ).toString();
 
         await axios.post(
-          "http://localhost:3008/api/login",
+          "http://147.139.135.195:8090/api/login",
           {
             data: encrypData,
           },

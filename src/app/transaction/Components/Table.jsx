@@ -40,7 +40,7 @@ export default function Table() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          `http://localhost:3008/api/getAllLocation`
+          `http://147.139.135.195:8090/api/getAllLocation`
         );
         setLocation(locationResponse.data);
       } catch (error) {
@@ -55,12 +55,12 @@ export default function Table() {
     const fetchTransaction = async () => {
       try {
         const tokenResponse = await axios.get(
-          "http://localhost:3008/api/token",
+          "http://147.139.135.195:8090/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
         const responseData = await axios.get(
-          `http://localhost:3008/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
+          `http://147.139.135.195:8090/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
             startDateFormat ? startDateFormat : ""
           }&endDate=${endDateFormat ? endDateFormat : ""}`,
           {
@@ -128,7 +128,7 @@ export default function Table() {
     try {
       setIsLoading(true); // Memulai loading sebelum mengambil data
       const response = await axios.get(
-        `http://localhost:3008/api/exportdata?LocationCode=${selectLocation}`,
+        `http://147.139.135.195:8090/api/exportdata?LocationCode=${selectLocation}`,
         { responseType: "arraybuffer" } // Mengatur responseType sebagai arraybuffer
       );
 

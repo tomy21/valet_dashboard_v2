@@ -84,7 +84,7 @@ export default function Dashboard() {
       setIsLoading(true);
       try {
         const tokenResponse = await axios.get(
-          "http://localhost:3008/api/token",
+          "http://147.139.135.195:8090/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
@@ -97,7 +97,7 @@ export default function Dashboard() {
         let response;
         if (activeButton === "daily") {
           response = await axios.get(
-            `http://localhost:3008/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
+            `http://147.139.135.195:8090/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -107,7 +107,7 @@ export default function Dashboard() {
         } else if (activeButton === "monthly") {
           const month = formattedDate.substring(5, 7);
           response = await axios.get(
-            `http://localhost:3008/api/dataMonthDashboard?locationCode=${selectLocation}&month=${month}`,
+            `http://147.139.135.195:8090/api/dataMonthDashboard?locationCode=${selectLocation}&month=${month}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -117,7 +117,7 @@ export default function Dashboard() {
         } else {
           const year = formattedDate.substring(0, 4);
           response = await axios.get(
-            `http://localhost:3008/api/dataYearlyDashboard?locationCode=${selectLocation}&year=${year}`,
+            `http://147.139.135.195:8090/api/dataYearlyDashboard?locationCode=${selectLocation}&year=${year}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -177,7 +177,7 @@ export default function Dashboard() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          "http://localhost:3008/api/getAllLocation"
+          "http://147.139.135.195:8090/api/getAllLocation"
         );
         setLocation(locationResponse.data);
       } catch (error) {

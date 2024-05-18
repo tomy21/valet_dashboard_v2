@@ -24,7 +24,7 @@ export default function Transaction() {
     const getToken = async () => {
       try {
         const tokenResponse = await axios.get(
-          "http://localhost:3008/api/token",
+          "http://147.139.135.195:8090/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;

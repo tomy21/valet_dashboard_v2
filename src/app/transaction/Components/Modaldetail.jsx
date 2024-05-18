@@ -15,7 +15,7 @@ function ModalDetail({ id, isOpen, onClose }) {
     const getDataDetail = async () => {
       try {
         const data = await axios.get(
-          `http://localhost:3008/api/getTransactionById/${id}`
+          `http://147.139.135.195:8090/api/getTransactionById/${id}`
         );
         setTrxNo(data.data.data.TrxNo);
         setVehiclePlate(data.data.data.VehiclePlate);
@@ -93,7 +93,10 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       foto1
-                        ? `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
+                        ? `http://147.139.135.195:8090/${foto1.replace(
+                            /\\/g,
+                            "/"
+                          )}`
                         : "/notfound.png"
                     }
                     width={100}
@@ -106,7 +109,10 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <button
                     onClick={() =>
                       downloadImage(
-                        `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
+                        `http://147.139.135.195:8090/${foto1.replace(
+                          /\\/g,
+                          "/"
+                        )}`
                       )
                     }
                     className="mt-2 bg-blue-500 text-white px-3 py-2 rounded-md"
@@ -121,7 +127,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       fotoBuktiPayment1
-                        ? `http://localhost:3008/${fotoBuktiPayment1.replace(
+                        ? `http://147.139.135.195:8090/${fotoBuktiPayment1.replace(
                             /\\/g,
                             "/"
                           )}`
@@ -137,7 +143,10 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <button
                     onClick={() =>
                       downloadImage(
-                        `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
+                        `http://147.139.135.195:8090/${foto1.replace(
+                          /\\/g,
+                          "/"
+                        )}`
                       )
                     }
                     className="mt-2 bg-blue-500 text-white px-3 py-2 rounded-md"
