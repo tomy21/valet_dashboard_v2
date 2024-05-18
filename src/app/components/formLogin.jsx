@@ -44,10 +44,9 @@ const FormLogin = () => {
           JSON.stringify(dataLogin),
           key
         ).toString();
-        console.log(encrypData);
 
         await axios.post(
-          "http://147.139.135.195:8090/api/login",
+          "http://localhost:3008/api/login",
           {
             data: encrypData,
           },
@@ -145,7 +144,7 @@ const FormLogin = () => {
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-5 rounded-md shadow-lg">
             <div className="flex items-center justify-center mb-3">
-              <ScaleLoader size={150} color={"#ffff"} loading={true} />
+              <ScaleLoader size={150} color={"#333"} loading={true} />
             </div>
           </div>
         </div>

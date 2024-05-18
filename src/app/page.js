@@ -1,6 +1,8 @@
+"use client";
 import Image from "next/image";
 import IntroPage from "./components/introPage";
 import FormLogin from "./components/formLogin";
+import { useEffect } from "react";
 
 export default function Home() {
   return (

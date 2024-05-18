@@ -3,7 +3,7 @@
 import React, { Suspense, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Card from "./component/Card";
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -22,6 +22,8 @@ import { useRouter } from "next/navigation";
 import { ScaleLoader } from "react-spinners";
 
 export default function Dashboard() {
+  const currentMonthStartDate = new Date();
+  currentMonthStartDate.setDate(1);
   const [token, setToken] = useState("");
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,15 +33,22 @@ export default function Dashboard() {
   const [vvip, setVVIP] = useState(0);
   const [income, setIncome] = useState(0);
   const [trx, setTrx] = useState(0);
-  const [avgValet, setAvgValet] = useState(0);
-  const [avgVip, setAvgVip] = useState(0);
-  const [avgVvip, setAvgVvip] = useState(0);
-  const [avgInTrx, setAvgInTrx] = useState(0);
+  const [avgDuration, setAvgDuration] = useState("0h 0m 0s");
+
+  const [compareValet, setCompareValet] = useState(0);
+  const [compareVip, setCompareVip] = useState(0);
+  const [compareVvip, setCompareVvip] = useState(0);
+  const [compareInTrx, setCompareInTrx] = useState(0);
+  const [compareIncome, setCompareIncome] = useState(0);
+  const [compareOut, setCompareOut] = useState(0);
+  const [compareON, setCompareON] = useState(0);
+  const [compareOverDay, setCompareOverDay] = useState(0);
+  const [compareDuration, setCompareDuration] = useState(0);
+
   const [inTrx, setInTrx] = useState(0);
   const [out, setOut] = useState(0);
   const [overNight, setOverNight] = useState(0);
   const [overDay, setOverDay] = useState(0);
-  const [avgIncome, setAvgIncome] = useState(0);
   const [locationData, setLocation] = useState("");
   const [activeButton, setActiveButton] = useState("daily");
   const [startDate, setStartDate] = useState(new Date());
@@ -53,18 +62,29 @@ export default function Dashboard() {
   const dateTime = DateTime.fromJSDate(startDate, { zone: "Asia/Jakarta" });
 
   useEffect(() => {
+    document.querySelectorAll("[bis_register]").forEach((el) => {
+      el.removeAttribute("bis_register");
+    });
+    document.querySelectorAll("[bis_skin_checked]").forEach((el) => {
+      el.removeAttribute("bis_skin_checked");
+    });
+  }, []);
+
+  useEffect(() => {
     // Menghapus atribut `bis_skin_checked` dari semua elemen
     document.querySelectorAll("[bis_skin_checked]").forEach((el) => {
       el.removeAttribute("bis_skin_checked");
     });
   }, []);
+
   const formattedDate = dateTime.toFormat("yyyy-MM-dd");
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const tokenResponse = await axios.get(
-          "http://147.139.135.195:8090/api/token",
+          "http://localhost:3008/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
@@ -74,31 +94,63 @@ export default function Dashboard() {
         setEmail(decodedJwt.email);
         setExpired(decodedJwt.exp);
 
-        // Fetch dashboard data using the new token
-        const response = await axios.get(
-          `http://147.139.135.195:8090/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
-          {
-            headers: {
-              Authorization: `Bearer ${newToken}`,
-            },
-          }
-        );
+        let response;
+        if (activeButton === "daily") {
+          response = await axios.get(
+            `http://localhost:3008/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+        } else if (activeButton === "monthly") {
+          const month = formattedDate.substring(5, 7);
+          response = await axios.get(
+            `http://localhost:3008/api/dataMonthDashboard?locationCode=${selectLocation}&month=${month}`,
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+        } else {
+          const year = formattedDate.substring(0, 4);
+          response = await axios.get(
+            `http://localhost:3008/api/dataYearlyDashboard?locationCode=${selectLocation}&year=${year}`,
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+        }
+        console.log(activeButton);
         setListLocation(response.data.response.listLocation);
         setListOfficer(response.data.response.listOfficer);
-        setValet(response.data.response.summary.Valet);
-        setVIP(response.data.response.summary.VIP);
-        setVVIP(response.data.response.summary.VVIP);
-        setIncome(response.data.response.summary.totalTariff);
-        setTrx(response.data.response.summary.totalTrxIn);
-        setAvgValet(response.data.response.average.valet);
-        setAvgInTrx(response.data.response.average.trxIn);
-        setAvgVip(response.data.response.average.vip);
-        setAvgVvip(response.data.response.average.vvip);
-        setAvgIncome(response.data.response.average.tariff);
-        setInTrx(response.data.response.summary.totalTrxIn);
-        setOut(response.data.response.summary.totalTrxOut);
-        setOverDay(response.data.response.summary.totalOverDay);
-        setOverNight(response.data.response.summary.totalON);
+
+        setValet(response.data.response.summary[0].Valet);
+        setVIP(response.data.response.summary[0].VIP);
+        setVVIP(response.data.response.summary[0].VVIP);
+        setIncome(response.data.response.summary[0].totalTariff);
+        setTrx(response.data.response.summary[0].totalTrxIn);
+        setInTrx(response.data.response.summary[0].totalTrxIn);
+        setOut(response.data.response.summary[0].totalTrxOut);
+        setOverDay(response.data.response.summary[0].totalOverDay);
+        setOverNight(response.data.response.summary[0].totalON);
+        setAvgDuration(
+          parseFloat(response.data.response.summary[0].DurationAvg)
+        );
+
+        setCompareValet(response.data.response.comparison.valet);
+        setCompareInTrx(response.data.response.comparison.trxIn);
+        setCompareVip(response.data.response.comparison.vip);
+        setCompareVvip(response.data.response.comparison.vvip);
+        setCompareIncome(response.data.response.comparison.tariff);
+        setCompareOut(response.data.response.comparison.trxOut);
+        setCompareON(response.data.response.comparison.totalON);
+        setCompareOverDay(response.data.response.comparison.totalOverDay);
+        setCompareDuration(response.data.response.comparison.duration);
         setDetail(response.data.response.detail);
         setIsLoading(false);
       } catch (error) {
@@ -111,7 +163,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, [router, selectLocation, startDate, formattedDate]);
+  }, [router, selectLocation, startDate, formattedDate, activeButton]);
 
   const handleButtonClick = (buttonType) => {
     setActiveButton(buttonType);
@@ -125,7 +177,7 @@ export default function Dashboard() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          "http://147.139.135.195:8090/api/getAllLocation"
+          "http://localhost:3008/api/getAllLocation"
         );
         setLocation(locationResponse.data);
       } catch (error) {
@@ -135,6 +187,26 @@ export default function Dashboard() {
 
     fetchLocations();
   }, []);
+
+  function formatDuration(minutesString) {
+    const totalMinutes = parseFloat(minutesString);
+
+    if (isNaN(totalMinutes)) {
+      return "0h 0m 0s";
+    }
+
+    const duration = Duration.fromObject({ minutes: Math.floor(totalMinutes) });
+
+    const hours = Math.floor(duration.as("hours"));
+    const remainingMinutes = duration.minus({ hours }).as("minutes");
+    const minutes = Math.floor(remainingMinutes);
+    const seconds = Math.floor((remainingMinutes - minutes) * 60);
+
+    return `${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  const formattedAvgDuration = formatDuration(avgDuration);
+  console.log(startDate);
 
   const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
     <div className="relative">
@@ -203,7 +275,7 @@ export default function Dashboard() {
               />
             )}
 
-            <Dropdown />
+            {/* <Dropdown /> */}
 
             <div className="inline-flex rounded-md shadow-sm" role="group">
               <button
@@ -256,8 +328,8 @@ export default function Dashboard() {
               <Card
                 title={"Total Income"}
                 value={formatNumber(income) ? formatNumber(income) : 0}
-                status={"day"}
-                avg={avgIncome}
+                status={activeButton}
+                avg={compareIncome}
               />
             )}
 
@@ -267,8 +339,8 @@ export default function Dashboard() {
               <Card
                 title={"Total Transaction"}
                 value={formatNumber(trx) ? formatNumber(trx) : 0}
-                status={"day"}
-                avg={avgInTrx}
+                status={activeButton}
+                avg={compareInTrx}
               />
             )}
 
@@ -278,21 +350,31 @@ export default function Dashboard() {
               <Card
                 title={"Valet"}
                 value={valet ? valet : 0}
-                status={"day"}
-                avg={avgValet}
+                status={activeButton}
+                avg={compareValet}
               />
             )}
 
             {isLoading ? (
               <LoadingCard />
             ) : (
-              <Card title={"VIP"} value={vip} status={"day"} avg={avgVip} />
+              <Card
+                title={"VIP"}
+                value={vip}
+                status={activeButton}
+                avg={compareVip}
+              />
             )}
 
             {isLoading ? (
               <LoadingCard />
             ) : (
-              <Card title={"VVIP"} value={vvip} status={"day"} avg={avgVvip} />
+              <Card
+                title={"VVIP"}
+                value={vvip}
+                status={activeButton}
+                avg={compareVvip}
+              />
             )}
           </div>
           <div className="flex flex-col w-[65%] gap-y-2">
@@ -304,19 +386,23 @@ export default function Dashboard() {
               ) : (
                 <div className="h-[40vh] w-full bg-white flex flex-col px-2 py-2 gap-y-2 rounded-md">
                   <div className="flex flex-row justify-between items-end">
-                    <LabelChart value={trx} title={"In"} avg={avgInTrx} />
-                    <LabelChart value={out} title={"Out"} avg={0.999} />
+                    <LabelChart value={inTrx} title={"In"} avg={compareInTrx} />
+                    <LabelChart value={out} title={"Out"} avg={compareOut} />
                     <LabelChart
                       value={overNight}
                       title={"Over Night"}
-                      avg={0.999}
+                      avg={compareON}
                     />
                     <LabelChart
                       value={overDay}
                       title={"Over Days"}
-                      avg={0.999}
+                      avg={compareOverDay}
                     />
-                    {/* <LabelChart value={900} title={"Avg Duration"} avg={0.999} /> */}
+                    <LabelChart
+                      value={formattedAvgDuration}
+                      title={"Avg Duration"}
+                      avg={compareDuration}
+                    />
                     <div className="bg-white rounded-sm py-1">
                       <div className="flex flex-row justify-start items-center gap-x-3">
                         <div className="flex flex-row items-center gap-x-2">
@@ -334,7 +420,10 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  <ChartDashboaard detailData={detail} />
+                  <ChartDashboaard
+                    detailData={detail}
+                    activeButton={activeButton}
+                  />
                 </div>
               )}
             </Suspense>

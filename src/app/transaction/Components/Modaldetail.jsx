@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { DateTime } from "luxon";
 import axios from "axios";
 import Image from "next/image";
 
@@ -15,7 +15,7 @@ function ModalDetail({ id, isOpen, onClose }) {
     const getDataDetail = async () => {
       try {
         const data = await axios.get(
-          `http://147.139.135.195:8090/api/getTransactionById/${id}`
+          `http://localhost:3008/api/getTransactionById/${id}`
         );
         setTrxNo(data.data.data.TrxNo);
         setVehiclePlate(data.data.data.VehiclePlate);
@@ -35,6 +35,15 @@ function ModalDetail({ id, isOpen, onClose }) {
   console.log(foto1);
   const handleClose = () => {
     onClose();
+  };
+
+  const downloadImage = (src) => {
+    const link = document.createElement("a");
+    link.href = src;
+    link.download = src.split("/").pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   if (!isOpen) {
@@ -72,7 +81,7 @@ function ModalDetail({ id, isOpen, onClose }) {
               <div className="flex flex-col">
                 <h1>Entry Date</h1>
                 <h1 className="text-base font-semibold text-slate-400">
-                  {InTime}
+                  {DateTime.fromISO(InTime).toFormat("ff")}
                 </h1>
               </div>
             </div>
@@ -84,10 +93,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       foto1
-                        ? `http://147.139.135.195:8090/${foto1.replace(
-                            /\\/g,
-                            "/"
-                          )}`
+                        ? `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
                         : "/notfound.png"
                     }
                     width={100}
@@ -96,6 +102,18 @@ function ModalDetail({ id, isOpen, onClose }) {
                     className="w-[100%] h-[100%] rounded-md"
                   ></Image>
                 </div>
+                {foto1 && (
+                  <button
+                    onClick={() =>
+                      downloadImage(
+                        `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
+                      )
+                    }
+                    className="mt-2 bg-blue-500 text-white px-3 py-2 rounded-md"
+                  >
+                    Download
+                  </button>
+                )}
               </div>
               <div className="flex flex-col">
                 <h1>Photo Payment</h1>
@@ -103,7 +121,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       fotoBuktiPayment1
-                        ? `http://147.139.135.195:8090/${fotoBuktiPayment1.replace(
+                        ? `http://localhost:3008/${fotoBuktiPayment1.replace(
                             /\\/g,
                             "/"
                           )}`
@@ -115,6 +133,18 @@ function ModalDetail({ id, isOpen, onClose }) {
                     className="w-[100%] h-[100%] rounded-md"
                   ></Image>
                 </div>
+                {fotoBuktiPayment1 && (
+                  <button
+                    onClick={() =>
+                      downloadImage(
+                        `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
+                      )
+                    }
+                    className="mt-2 bg-blue-500 text-white px-3 py-2 rounded-md"
+                  >
+                    Download
+                  </button>
+                )}
               </div>
             </div>
           </div>

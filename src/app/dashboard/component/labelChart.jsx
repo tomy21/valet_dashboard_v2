@@ -8,8 +8,16 @@ export default function LabelChart({ title, value, avg }) {
       <h1 className="text-slate-400 font-medium">{value}</h1>
       <div className="flex flex-row justify-start items-center space-x-2 text-[10px]">
         <div className="flex flex-row justify-center items-center space-x-1">
-          <FaArrowTrendUp className="text-green-600" />
-          <p className="text-slate-400">{(avg * 100).toFixed(2)}%</p>
+          {avg > 1 ? (
+            <FaArrowTrendUp className="text-green-600" />
+          ) : avg === 0 || avg === null ? (
+            ""
+          ) : (
+            <FaArrowTrendDown className="text-red-600" />
+          )}
+          <p className="text-xs text-slate-400">
+            {avg === null ? "0%" : avg.toFixed(2)}%
+          </p>
         </div>
       </div>
     </div>

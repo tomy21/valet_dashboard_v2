@@ -11,12 +11,23 @@ export default function Card({ title, value, avg, status }) {
           <div className="flex flex-row space-x-1">
             {avg > 1 ? (
               <FaArrowTrendUp className="text-green-600" />
+            ) : avg === 0 || avg === null ? (
+              ""
             ) : (
               <FaArrowTrendDown className="text-red-600" />
             )}
-            <p className="text-xs text-slate-400">{(avg * 100).toFixed(2)}%</p>
+            <p className="text-xs text-slate-400">
+              {avg === null ? "0%" : avg.toFixed(2)}%
+            </p>
           </div>
-          <p className="text-xs text-slate-400">Vs last {status}</p>
+          <p className="text-xs text-slate-400">
+            Vs last{" "}
+            {status === "daily"
+              ? "Day"
+              : status === "monthly"
+              ? "Month"
+              : "Year"}
+          </p>
         </div>
       </div>
     </div>

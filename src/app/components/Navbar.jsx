@@ -37,7 +37,7 @@ export default function Navbar({ username, email }) {
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      await axios.get("http://147.139.135.195:8090/api/logout");
+      await axios.get("http://localhost:3008/api/logout");
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -55,7 +55,17 @@ export default function Navbar({ username, email }) {
         <div className="container flex flex-row space-x-10 justify-end items-end">
           <div className="flex">
             <div className="flex flex-row items-end justify-start space-x-2">
-              <Image src={"/logo.png"} width={40} height={40} alt="Logo Sky" />
+              <div className="w-auto h-auto">
+                <Image
+                  src={"/logo.png"}
+                  width={40}
+                  height={40}
+                  alt="Logo Sky"
+                  priority
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,..."
+                />
+              </div>
               <h1 className="text-xl font-semibold">SKY Parking</h1>
             </div>
           </div>
@@ -87,12 +97,17 @@ export default function Navbar({ username, email }) {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <Image
-                  alt="Poto profile"
-                  src={"/logo.png"}
-                  width={40}
-                  height={40}
-                />
+                <div className="w-auto h-auto">
+                  <Image
+                    alt="Poto profile"
+                    src={"/logo.png"}
+                    width={40}
+                    height={40}
+                    priority
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,..."
+                  />
+                </div>
               </div>
             </div>
             <ul
