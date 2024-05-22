@@ -125,7 +125,7 @@ export default function Table() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `https://dev-valetapi.skyparking.online/api/exportdata?LocationCode=${selectLocation}`,
+        `https://dev-valetapi.skyparking.online/api/exportdata?LocationCode=${selectLocation}&startDate=${startDateFormat}&endDate=${endDateFormat}`,
         { responseType: "arraybuffer" }
       );
 
