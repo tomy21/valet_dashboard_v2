@@ -24,7 +24,7 @@ export default function Transaction() {
     const getToken = async () => {
       try {
         const tokenResponse = await axios.get(
-          "http://147.139.135.195:8090/api/token",
+          "https://dev-valetapi.skyparking.online/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;

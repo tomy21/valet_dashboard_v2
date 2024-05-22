@@ -46,7 +46,7 @@ const FormLogin = () => {
         ).toString();
 
         await axios.post(
-          "http://147.139.135.195:8090/api/login",
+          "https://dev-valetapi.skyparking.online/api/login",
           {
             data: encrypData,
           },
@@ -80,6 +80,8 @@ const FormLogin = () => {
           <input
             type="text"
             value={email}
+            id="email"
+            name="email"
             onChange={(e) => setEmail(e.target.value)}
             className="border border-slate-400 px-3 py-2 rounded-md"
             placeholder="Enter email"
@@ -87,12 +89,14 @@ const FormLogin = () => {
         </div>
 
         <div className="flex flex-col mb-5 text-sm">
-          <label htmlFor="email" className="mb-1">
+          <label htmlFor="password" className="mb-1">
             Password
           </label>
           <input
             type="password"
             value={password}
+            id="password"
+            name="password"
             onChange={(e) => setPassword(e.target.value)}
             className="border border-slate-400 px-3 py-2 rounded-md"
             placeholder="*************"

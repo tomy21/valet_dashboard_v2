@@ -40,7 +40,7 @@ export default function Table() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          `http://147.139.135.195:8090/api/getAllLocation`
+          `https://dev-valetapi.skyparking.online/api/getAllLocation`
         );
         setLocation(locationResponse.data);
       } catch (error) {
@@ -55,12 +55,12 @@ export default function Table() {
     const fetchTransaction = async () => {
       try {
         const tokenResponse = await axios.get(
-          "http://147.139.135.195:8090/api/token",
+          "https://dev-valetapi.skyparking.online/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
         const responseData = await axios.get(
-          `http://147.139.135.195:8090/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
+          `https://dev-valetapi.skyparking.online/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
             startDateFormat ? startDateFormat : ""
           }&endDate=${endDateFormat ? endDateFormat : ""}`,
           {
@@ -90,15 +90,13 @@ export default function Table() {
 
   const handleLimit = (event) => {
     const selectedLimit = parseInt(event.target.value);
-    const newTotalPages = Math.ceil(countData / selectedLimit); // Calculate new total pages based on total data count
+    const newTotalPages = Math.ceil(countData / selectedLimit);
 
     setLimit(selectedLimit);
 
-    // Update current page if it exceeds new total pages
     if (pages > newTotalPages) {
       setPages(1); // Reset to first page
     } else {
-      // Ensure first page has active class when changing limit
       changePage({ selected: 0 }); // Set to first page
     }
   };
@@ -124,15 +122,13 @@ export default function Table() {
   };
 
   const handleExport = async () => {
-    // if (selectLocation) {
     try {
-      setIsLoading(true); // Memulai loading sebelum mengambil data
+      setIsLoading(true);
       const response = await axios.get(
-        `http://147.139.135.195:8090/api/exportdata?LocationCode=${selectLocation}`,
-        { responseType: "arraybuffer" } // Mengatur responseType sebagai arraybuffer
+        `https://dev-valetapi.skyparking.online/api/exportdata?LocationCode=${selectLocation}`,
+        { responseType: "arraybuffer" }
       );
 
-      // Membuat link untuk mengunduh file
       const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
       const fileName = `${selectLocation}_alldata.xlsx`;
       const link = document.createElement("a");
@@ -152,19 +148,13 @@ export default function Table() {
         });
       }
     } catch (error) {
-      console.log(error);
       toast.error("Terjadi kesalahan saat mengunduh data.", {
         position: "top-right",
       });
-      setIsLoading(false); // Menghentikan loading jika terjadi kesalahan
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
-    // } else {
-    //   toast.error("Location wajib diisi.", {
-    //     position: "top-right",
-    //   });
-    // }
   };
 
   const handleSearchChange = (event) => {

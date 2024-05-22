@@ -15,7 +15,7 @@ function ModalDetail({ id, isOpen, onClose }) {
     const getDataDetail = async () => {
       try {
         const data = await axios.get(
-          `http://147.139.135.195:8090/api/getTransactionById/${id}`
+          `https://dev-valetapi.skyparking.online/api/getTransactionById/${id}`
         );
         setTrxNo(data.data.data.TrxNo);
         setVehiclePlate(data.data.data.VehiclePlate);
@@ -93,7 +93,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       foto1
-                        ? `http://147.139.135.195:8090/${foto1.replace(
+                        ? `https://dev-valetapi.skyparking.online/${foto1.replace(
                             /\\/g,
                             "/"
                           )}`
@@ -109,7 +109,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <button
                     onClick={() =>
                       downloadImage(
-                        `http://147.139.135.195:8090/${foto1.replace(
+                        `https://dev-valetapi.skyparking.online/${foto1.replace(
                           /\\/g,
                           "/"
                         )}`
@@ -127,7 +127,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       fotoBuktiPayment1
-                        ? `http://147.139.135.195:8090/${fotoBuktiPayment1.replace(
+                        ? `https://dev-valetapi.skyparking.online/${fotoBuktiPayment1.replace(
                             /\\/g,
                             "/"
                           )}`
@@ -143,7 +143,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <button
                     onClick={() =>
                       downloadImage(
-                        `http://147.139.135.195:8090/${foto1.replace(
+                        `https://dev-valetapi.skyparking.online/${foto1.replace(
                           /\\/g,
                           "/"
                         )}`

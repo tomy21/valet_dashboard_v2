@@ -1,7 +1,10 @@
 import React from "react";
 import { LineChart, Line, XAxis, Tooltip, YAxis } from "recharts";
 
-export default function ChartDashboard({ detailData, activeButton }) {
+export default function ChartDashboard({
+  detailData = [],
+  activeButton = "daily",
+}) {
   const chartData = detailData.map((item) => {
     let name;
     if (activeButton === "daily") {
