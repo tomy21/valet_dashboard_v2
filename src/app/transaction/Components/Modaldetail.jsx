@@ -93,10 +93,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       foto1
-                        ? `https://dev-valetapi.skyparking.online/${foto1.replace(
-                            /\\/g,
-                            "/"
-                          )}`
+                        ? `https://dev-valetapi.skyparking.online/${foto1}`
                         : "/notfound.png"
                     }
                     width={100}
@@ -127,10 +124,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       fotoBuktiPayment1
-                        ? `https://dev-valetapi.skyparking.online/${fotoBuktiPayment1.replace(
-                            /\\/g,
-                            "/"
-                          )}`
+                        ? `https://dev-valetapi.skyparking.online/${fotoBuktiPayment1}`
                         : "/notfound.png"
                     }
                     width={100}
