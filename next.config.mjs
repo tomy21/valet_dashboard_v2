@@ -2,7 +2,7 @@
 const nextConfig = {
   images: {
     // domains: ["localhost"],
-    domains: ["147.139.135.195"],
+    domains: ["dev-valetapi.skyparking.online"],
   },
   output: "standalone",
   async rewrites() {
