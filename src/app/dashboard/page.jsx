@@ -88,7 +88,7 @@ export default function Dashboard() {
       setIsLoading(true);
       try {
         const tokenResponse = await axios.get(
-          "http://localhost:3008/api/token",
+          "https://dev-valetapi.skyparking.online/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
@@ -101,7 +101,7 @@ export default function Dashboard() {
         let response;
         if (activeButton === "daily") {
           response = await axios.get(
-            `http://localhost:3008/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
+            `https://dev-valetapi.skyparking.online/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -111,7 +111,7 @@ export default function Dashboard() {
         } else if (activeButton === "monthly") {
           const month = formattedDate.substring(5, 7);
           response = await axios.get(
-            `http://localhost:3008/api/dataMonthDashboard?locationCode=${selectLocation}&month=${month}`,
+            `https://dev-valetapi.skyparking.online/api/dataMonthDashboard?locationCode=${selectLocation}&month=${month}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -121,7 +121,7 @@ export default function Dashboard() {
         } else {
           const year = formattedDate.substring(0, 4);
           response = await axios.get(
-            `http://localhost:3008/api/dataYearlyDashboard?locationCode=${selectLocation}&year=${year}`,
+            `https://dev-valetapi.skyparking.online/api/dataYearlyDashboard?locationCode=${selectLocation}&year=${year}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -183,7 +183,7 @@ export default function Dashboard() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          "http://localhost:3008/api/getAllLocation"
+          "https://dev-valetapi.skyparking.online/api/getAllLocation"
         );
         setLocation(locationResponse.data);
       } catch (error) {

@@ -42,7 +42,7 @@ export default function Table() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          `http://localhost:3008/api/getAllLocation`
+          `https://dev-valetapi.skyparking.online/api/getAllLocation`
         );
         setLocation(locationResponse.data);
       } catch (error) {
@@ -57,12 +57,12 @@ export default function Table() {
     const fetchTransaction = async () => {
       try {
         const tokenResponse = await axios.get(
-          "http://localhost:3008/api/token",
+          "https://dev-valetapi.skyparking.online/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
         const responseData = await axios.get(
-          `http://localhost:3008/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
+          `https://dev-valetapi.skyparking.online/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
             startDateFormat ? startDateFormat : ""
           }&endDate=${endDateFormat ? endDateFormat : ""}`,
           {
@@ -129,7 +129,7 @@ export default function Table() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `http://localhost:3008/api/exportdata?LocationCode=${selectLocation}&startDate=${startDateFormat}&endDate=${endDateFormat}`,
+        `https://dev-valetapi.skyparking.online/api/exportdata?LocationCode=${selectLocation}&startDate=${startDateFormat}&endDate=${endDateFormat}`,
         { responseType: "arraybuffer" }
       );
 
