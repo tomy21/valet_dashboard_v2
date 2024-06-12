@@ -33,6 +33,9 @@ export default function Dashboard() {
   const [valet, setValet] = useState(0);
   const [vip, setVIP] = useState(0);
   const [vvip, setVVIP] = useState(0);
+  const [tariffValet, setTariffValet] = useState(0);
+  const [tariffVip, setTariffVIP] = useState(0);
+  const [tariffVvip, setTariffVVIP] = useState(0);
   const [income, setIncome] = useState(0);
   const [trx, setTrx] = useState(0);
   const [avgDuration, setAvgDuration] = useState("0h 0m 0s");
@@ -85,7 +88,7 @@ export default function Dashboard() {
       setIsLoading(true);
       try {
         const tokenResponse = await axios.get(
-          "https://dev-valetapi.skyparking.online/api/token",
+          "http://localhost:3008/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
@@ -98,7 +101,7 @@ export default function Dashboard() {
         let response;
         if (activeButton === "daily") {
           response = await axios.get(
-            `https://dev-valetapi.skyparking.online/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
+            `http://localhost:3008/api/dailyDashboard?locationCode=${selectLocation}&date=${formattedDate}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -108,7 +111,7 @@ export default function Dashboard() {
         } else if (activeButton === "monthly") {
           const month = formattedDate.substring(5, 7);
           response = await axios.get(
-            `https://dev-valetapi.skyparking.online/api/dataMonthDashboard?locationCode=${selectLocation}&month=${month}`,
+            `http://localhost:3008/api/dataMonthDashboard?locationCode=${selectLocation}&month=${month}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -118,7 +121,7 @@ export default function Dashboard() {
         } else {
           const year = formattedDate.substring(0, 4);
           response = await axios.get(
-            `https://dev-valetapi.skyparking.online/api/dataYearlyDashboard?locationCode=${selectLocation}&year=${year}`,
+            `http://localhost:3008/api/dataYearlyDashboard?locationCode=${selectLocation}&year=${year}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -132,6 +135,9 @@ export default function Dashboard() {
         setValet(response.data.response.summary[0].Valet);
         setVIP(response.data.response.summary[0].VIP);
         setVVIP(response.data.response.summary[0].VVIP);
+        setTariffValet(response.data.response.summary[0].TotalTariffValet);
+        setTariffVIP(response.data.response.summary[0].TotalTariffVIP);
+        setTariffVVIP(response.data.response.summary[0].TotalTariffVVIP);
         setIncome(response.data.response.summary[0].totalTariff);
         setTrx(response.data.response.summary[0].totalTrxIn);
         setInTrx(response.data.response.summary[0].totalTrxIn);
@@ -177,7 +183,7 @@ export default function Dashboard() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          "https://dev-valetapi.skyparking.online/api/getAllLocation"
+          "http://localhost:3008/api/getAllLocation"
         );
         setLocation(locationResponse.data);
       } catch (error) {
@@ -319,114 +325,130 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="flex justify-between items-start gap-2 w-full mx-auto">
-          <div className="flex flex-col space-y-2">
-            {isLoading ? (
-              <LoadingCard />
-            ) : (
-              <Card
-                title={"Total Income"}
-                value={formatNumber(income) ? formatNumber(income) : 0}
-                status={activeButton}
-                avg={compareIncome}
-              />
-            )}
 
-            {isLoading ? (
-              <LoadingCard />
-            ) : (
-              <Card
-                title={"Total Transaction"}
-                value={formatNumber(trx) ? formatNumber(trx) : 0}
-                status={activeButton}
-                avg={compareInTrx}
-              />
-            )}
-
-            {isLoading ? (
-              <LoadingCard />
-            ) : (
-              <Card
-                title={"Valet"}
-                value={valet ? valet : 0}
-                status={activeButton}
-                avg={compareValet}
-              />
-            )}
-
-            {isLoading ? (
-              <LoadingCard />
-            ) : (
-              <Card
-                title={"VIP"}
-                value={vip}
-                status={activeButton}
-                avg={compareVip}
-              />
-            )}
-
-            {isLoading ? (
-              <LoadingCard />
-            ) : (
-              <Card
-                title={"VVIP"}
-                value={vvip}
-                status={activeButton}
-                avg={compareVvip}
-              />
-            )}
-          </div>
-          <div className="flex flex-col w-[65%] gap-y-2">
-            <Suspense fallback={<LoadingCard />}>
+        <div className="flex justify-between items-start gap-2 w-[100%] mx-auto">
+          <div className="flex flex-col w-[70%]">
+            <div className="flex flex-row justify-center items-center space-x-2 w-full">
               {isLoading ? (
-                <div className="h-[40vh] w-full bg-white flex flex-col px-2 py-2 gap-y-2 rounded-md mx-auto justify-center items-center">
-                  <ScaleLoader size={50} color={"#333"} loading={true} />
-                </div>
+                <LoadingCard />
               ) : (
-                <div className="h-[40vh] w-full bg-white flex flex-col px-2 py-2 gap-y-2 rounded-md">
-                  <div className="flex flex-row justify-between items-end">
-                    <LabelChart value={inTrx} title={"In"} avg={compareInTrx} />
-                    <LabelChart value={out} title={"Out"} avg={compareOut} />
-                    <LabelChart
-                      value={overNight}
-                      title={"Over Night"}
-                      avg={compareON}
-                    />
-                    <LabelChart
-                      value={overDay}
-                      title={"Over Days"}
-                      avg={compareOverDay}
-                    />
-                    <LabelChart
-                      value={formattedAvgDuration}
-                      title={"Avg Duration"}
-                      avg={compareDuration}
-                    />
-                    <div className="bg-white rounded-sm py-1">
-                      <div className="flex flex-row justify-start items-center gap-x-3">
-                        <div className="flex flex-row items-center gap-x-2">
-                          <div className="relative bg-blue-100 w-4 h-4 rounded-full">
-                            <div className="absolute bg-blue-700 w-2 h-2 rounded-full top-1 left-1"></div>
+                <Card
+                  title={"Total Income"}
+                  value={formatNumber(income) ? formatNumber(income) : 0}
+                  status={activeButton}
+                  avg={compareIncome}
+                  tariff={""}
+                />
+              )}
+
+              {isLoading ? (
+                <LoadingCard />
+              ) : (
+                <Card
+                  title={"Total Transaction"}
+                  value={formatNumber(trx) ? formatNumber(trx) : 0}
+                  status={activeButton}
+                  avg={compareInTrx}
+                  tariff={""}
+                />
+              )}
+
+              {isLoading ? (
+                <LoadingCard />
+              ) : (
+                <Card
+                  title={"Valet"}
+                  value={valet ? valet : 0}
+                  status={activeButton}
+                  avg={compareValet}
+                  tariff={
+                    formatNumber(tariffValet) ? formatNumber(tariffValet) : 0
+                  }
+                />
+              )}
+
+              {isLoading ? (
+                <LoadingCard />
+              ) : (
+                <Card
+                  title={"VIP"}
+                  value={vip}
+                  status={activeButton}
+                  avg={compareVip}
+                  tariff={formatNumber(tariffVip) ? formatNumber(tariffVip) : 0}
+                />
+              )}
+
+              {isLoading ? (
+                <LoadingCard />
+              ) : (
+                <Card
+                  title={"VVIP"}
+                  value={vvip}
+                  status={activeButton}
+                  avg={compareVvip}
+                  tariff={
+                    formatNumber(tariffVvip) ? formatNumber(tariffVvip) : 0
+                  }
+                />
+              )}
+            </div>
+
+            <div className="flex flex-col w-[100%] h-full gap-y-2 mt-5">
+              <Suspense fallback={<LoadingCard />}>
+                {isLoading ? (
+                  <div className="h-full w-full bg-white flex flex-col px-2 py-2 gap-y-2 rounded-md mx-auto justify-center items-center">
+                    <ScaleLoader size={50} color={"#333"} loading={true} />
+                  </div>
+                ) : (
+                  <div className="h-[100%] w-full bg-white flex flex-col px-2 py-2 gap-y-2 rounded-md">
+                    <div className="flex flex-row justify-between items-end">
+                      <LabelChart
+                        value={inTrx}
+                        title={"In"}
+                        avg={compareInTrx}
+                      />
+                      <LabelChart value={out} title={"Out"} avg={compareOut} />
+                      <LabelChart
+                        value={overNight}
+                        title={"Over Night"}
+                        avg={compareON}
+                      />
+                      <LabelChart
+                        value={overDay}
+                        title={"Over Days"}
+                        avg={compareOverDay}
+                      />
+                      <LabelChart
+                        value={formattedAvgDuration}
+                        title={"Avg Duration"}
+                        avg={compareDuration}
+                      />
+                      <div className="bg-white rounded-sm py-1">
+                        <div className="flex flex-row justify-start items-center gap-x-3">
+                          <div className="flex flex-row items-center gap-x-2">
+                            <div className="relative bg-blue-100 w-4 h-4 rounded-full">
+                              <div className="absolute bg-blue-700 w-2 h-2 rounded-full top-1 left-1"></div>
+                            </div>
+                            <h1 className="text-xs">In</h1>
                           </div>
-                          <h1 className="text-xs">In</h1>
-                        </div>
-                        <div className="flex flex-row items-center gap-x-2">
-                          <div className="relative bg-red-100 w-4 h-4 rounded-full">
-                            <div className="absolute bg-red-700 w-2 h-2 rounded-full top-1 left-1"></div>
+                          <div className="flex flex-row items-center gap-x-2">
+                            <div className="relative bg-red-100 w-4 h-4 rounded-full">
+                              <div className="absolute bg-red-700 w-2 h-2 rounded-full top-1 left-1"></div>
+                            </div>
+                            <h1 className="text-xs">Out</h1>
                           </div>
-                          <h1 className="text-xs">Out</h1>
                         </div>
                       </div>
                     </div>
+                    <ChartDashboaard
+                      detailData={detail}
+                      activeButton={activeButton}
+                    />
                   </div>
-                  <ChartDashboaard
-                    detailData={detail}
-                    activeButton={activeButton}
-                  />
-                </div>
-              )}
-            </Suspense>
-            {/* <Suspense fallback={<LoadingCard />}>
+                )}
+              </Suspense>
+              {/* <Suspense fallback={<LoadingCard />}>
               {isLoading ? (
                 <div className="h-full w-full bg-white px-2 py-2 rounded-md flex mx-auto justify-center items-center">
                   <ScaleLoader size={50} color={"#333"} loading={true} />
@@ -437,8 +459,10 @@ export default function Dashboard() {
                 </div>
               )}
             </Suspense> */}
+            </div>
           </div>
-          <div className="flex flex-col w-[40%] gap-y-2">
+
+          <div className="flex flex-col w-[30%] gap-y-2">
             <Suspense>
               {isLoading ? (
                 <div className="h-[40vh] w-full bg-white flex flex-col px-2 py-2 gap-y-2 rounded-md mx-auto justify-center items-center ">

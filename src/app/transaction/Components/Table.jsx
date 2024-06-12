@@ -20,6 +20,8 @@ export default function Table() {
   const [locationData, setLocation] = useState("");
   const [selectLocation, setSelectLocation] = useState("");
   const [transaction, setTransaction] = useState([]);
+  const [totalTrx, setTotalTrx] = useState(0);
+  const [totalTariff, setTotalTariff] = useState(0);
   const [limit, setLimit] = useState(10);
   const [countData, setCountData] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,7 +42,7 @@ export default function Table() {
     const fetchLocations = async () => {
       try {
         const locationResponse = await axios.get(
-          `https://dev-valetapi.skyparking.online/api/getAllLocation`
+          `http://localhost:3008/api/getAllLocation`
         );
         setLocation(locationResponse.data);
       } catch (error) {
@@ -55,12 +57,12 @@ export default function Table() {
     const fetchTransaction = async () => {
       try {
         const tokenResponse = await axios.get(
-          "https://dev-valetapi.skyparking.online/api/token",
+          "http://localhost:3008/api/token",
           { withCredentials: true }
         );
         const newToken = tokenResponse.data.accessToken;
         const responseData = await axios.get(
-          `https://dev-valetapi.skyparking.online/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
+          `http://localhost:3008/api/transaction?limit=${limit}&location=${selectLocation}&page=${pages}&keyword=${search}&startDate=${
             startDateFormat ? startDateFormat : ""
           }&endDate=${endDateFormat ? endDateFormat : ""}`,
           {
@@ -69,6 +71,8 @@ export default function Table() {
             },
           }
         );
+        setTotalTrx(responseData.data.summary.totalTrx);
+        setTotalTariff(responseData.data.summary.totalTarif);
         setTransaction(responseData.data.data);
         setTotalPages(responseData.data.totalPages);
         setCountData(responseData.data.totalItems);
@@ -125,7 +129,7 @@ export default function Table() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `https://dev-valetapi.skyparking.online/api/exportdata?LocationCode=${selectLocation}&startDate=${startDateFormat}&endDate=${endDateFormat}`,
+        `http://localhost:3008/api/exportdata?LocationCode=${selectLocation}&startDate=${startDateFormat}&endDate=${endDateFormat}`,
         { responseType: "arraybuffer" }
       );
 
@@ -165,21 +169,14 @@ export default function Table() {
     <>
       <ToastContainer />
       <div className="flex justify-between items-center mb-2">
-        <div className="flex flex-row gap-2 justify-start items-center">
-          <h1 className="text-xs">Show</h1>
-          <select
-            name="limit"
-            value={limit}
-            onChange={handleLimit}
-            className="border border-slate-300 rounded-md p-1 text-xs"
-          >
-            <option value="10">10</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-          <h1 className="text-xs">entries</h1>
-        </div>
         <div className="flex flex-row gap-3 z-10">
+          <input
+            type="search"
+            value={search}
+            onChange={handleSearchChange}
+            className="border border-slate-300 px-3 py-1 rounded-md text-sm"
+            placeholder="Search"
+          />
           <LocationList
             data={locationData}
             onSelectLocation={(locCode) => setSelectLocation(locCode)}
@@ -198,14 +195,21 @@ export default function Table() {
             Export
             <HiOutlineDownload />
           </button>
-
-          <input
-            type="search"
-            value={search}
-            onChange={handleSearchChange}
-            className="border border-slate-300 px-3 py-2 rounded-xl text-sm"
-            placeholder="Search"
-          />
+        </div>
+        <div className="flex flex-row mr-5 items-center gap-x-5">
+          <div className="flex flex-col">
+            <h1 className="text-xs">Total Tariff</h1>
+            <p className="text-sm font-semibold">
+              IDR {formatNumber(totalTariff)}
+            </p>
+          </div>
+          <div className="h-10 w-px bg-gray-300"></div>
+          <div className="flex flex-col">
+            <h1 className="text-xs">Total Transaction</h1>
+            <p className="text-sm font-semibold">
+              {totalTrx.toLocaleString("en-US")}
+            </p>
+          </div>
         </div>
       </div>
       <div className="overflow-x-auto max-h-[56vh] w-full">
@@ -307,6 +311,19 @@ export default function Table() {
               <span className="font-medium px-1">{countData}</span>
               results
             </p>
+            <div className="flex flex-row gap-2 justify-start items-center">
+              <select
+                name="limit"
+                value={limit}
+                onChange={handleLimit}
+                className="border border-slate-300 rounded-md p-1 text-xs"
+              >
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <h1 className="text-xs">entries</h1>
+            </div>
           </div>
           <div>
             <nav aria-label="Page navigation">

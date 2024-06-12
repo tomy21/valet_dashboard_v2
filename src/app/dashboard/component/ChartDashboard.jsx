@@ -41,9 +41,9 @@ export default function ChartDashboard({
 
   return (
     <LineChart
-      className="text-xs mt-2 -ml-10"
-      width={750}
-      height={180}
+      className="text-xs mt-2 -ml-10 w-full"
+      width={900}
+      height={290}
       data={chartData}
       connectNulls={true}
     >

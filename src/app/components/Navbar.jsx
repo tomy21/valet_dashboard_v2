@@ -37,7 +37,7 @@ export default function Navbar({ username, email }) {
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      await axios.get("https://dev-valetapi.skyparking.online/api/logout");
+      await axios.get("http://localhost:3008/api/logout");
       router.push("/");
     } catch (error) {
       console.log(error);

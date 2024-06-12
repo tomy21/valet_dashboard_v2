@@ -8,7 +8,7 @@ export default function ListPetugas({ listOfficer }) {
           <thead>
             <tr className="font-semibold">
               <th>No</th>
-              <th>Location</th>
+              <th>Officer Name</th>
               <th>Amount</th>
             </tr>
           </thead>

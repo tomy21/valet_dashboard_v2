@@ -1,12 +1,21 @@
 import React from "react";
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 
-export default function Card({ title, value, avg, status }) {
+export default function Card({ title, value, avg, status, tariff }) {
   return (
     <div>
-      <div className="bg-white shadow-md rounded-md w-48 h-[91px] px-2 py-1">
+      <div className="bg-white shadow-md rounded-md w-[10.7rem] h-[91px] px-2 py-1">
         <h2 className="text-sm text-stone-500 font-medium">{title}</h2>
-        <p className="font-medium mt-2 mb-3 text-lg">{value}</p>
+        <p className="font-medium mt-2 mb-3 text-lg">
+          {tariff === "" ? (
+            value
+          ) : (
+            <>
+              {value}
+              <span className="text-slate-500 text-xs ml-1">{`/ ${tariff}`}</span>
+            </>
+          )}
+        </p>
         <div className="flex flex-row justify-start items-center space-x-2">
           <div className="flex flex-row space-x-1">
             {avg > 1 ? (

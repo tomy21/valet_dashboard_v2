@@ -9,7 +9,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://dev-valetapi.skyparking.online/api/:path*", // Ganti dengan URL server Anda
+        destination: "http://localhost:3008/api/:path*", // Ganti dengan URL server Anda
       },
     ];
   },

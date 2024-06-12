@@ -15,7 +15,7 @@ function ModalDetail({ id, isOpen, onClose }) {
     const getDataDetail = async () => {
       try {
         const data = await axios.get(
-          `https://dev-valetapi.skyparking.online/api/getTransactionById/${id}`
+          `http://localhost:3008/api/getTransactionById/${id}`
         );
         setTrxNo(data.data.data.TrxNo);
         setVehiclePlate(data.data.data.VehiclePlate);
@@ -92,9 +92,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                 <div className="w-40 h-40 bg-black text-white rounded-md flex justify-center items-center mx-auto ">
                   <Image
                     src={
-                      foto1
-                        ? `https://dev-valetapi.skyparking.online/${foto1}`
-                        : "/notfound.png"
+                      foto1 ? `http://localhost:3008/${foto1}` : "/notfound.png"
                     }
                     width={100}
                     height={50}
@@ -106,10 +104,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <button
                     onClick={() =>
                       downloadImage(
-                        `https://dev-valetapi.skyparking.online/${foto1.replace(
-                          /\\/g,
-                          "/"
-                        )}`
+                        `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
                       )
                     }
                     className="mt-2 bg-blue-500 text-white px-3 py-2 rounded-md"
@@ -124,7 +119,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <Image
                     src={
                       fotoBuktiPayment1
-                        ? `https://dev-valetapi.skyparking.online/${fotoBuktiPayment1}`
+                        ? `http://localhost:3008/${fotoBuktiPayment1}`
                         : "/notfound.png"
                     }
                     width={100}
@@ -137,10 +132,7 @@ function ModalDetail({ id, isOpen, onClose }) {
                   <button
                     onClick={() =>
                       downloadImage(
-                        `https://dev-valetapi.skyparking.online/${foto1.replace(
-                          /\\/g,
-                          "/"
-                        )}`
+                        `http://localhost:3008/${foto1.replace(/\\/g, "/")}`
                       )
                     }
                     className="mt-2 bg-blue-500 text-white px-3 py-2 rounded-md"
